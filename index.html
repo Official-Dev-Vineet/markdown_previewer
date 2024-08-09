@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Markdown Previewer</title>
+    <link rel="stylesheet" href="css/styles.css" />
+  </head>
+  <body>
+    <div class="container">
+      <h1 class="title">Markdown Previewer</h1>
+      <textarea
+        id="markdownInput"
+        placeholder="Write your Markdown here..."
+      ></textarea>
+      <div class="buttons">
+        <button id="downloadButton">Download as HTML</button>
+      </div>
+      <div id="preview" class="preview"></div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/13.0.3/marked.min.js"></script>
+    <script>
+      const markdownInput = document.getElementById("markdownInput");
+      const preview = document.getElementById("preview");
+      const downloadButton = document.getElementById("downloadButton");
+
+      function updatePreview() {
+        const markdownText = markdownInput.value;
+        const htmlContent = marked.parse(markdownText);
+        preview.innerHTML = htmlContent;
+      }
+
+      function downloadAsHTML() {
+        const markdownText = markdownInput.value;
+        const htmlContent = marked.parse(markdownText);
+        const blob = new Blob([htmlContent], { type: "text/html" });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "markdown.html";
+        a.click();
+        URL.revokeObjectURL(url);
+      }
+
+      markdownInput.addEventListener("input", updatePreview);
+      downloadButton.addEventListener("click", downloadAsHTML);
+
+      updatePreview(); // Initial call to display any default text
+    </script>
+  </body>
+</html>
